@@ -1,3 +1,23 @@
+"""
+Vector Database Indexing Program
+
+Author: Manoj Busam
+Date: April 22, 2024
+
+This program implements vector database indexing using the following tools:
+- Amazon S3 for document storage
+- TensorFlow for processing
+- OpenAI's ChatGPT for generating embeddings
+- Pinecone for vector storage and retrieval
+
+The program includes functionalities for:
+1. Downloading documents from S3.
+2. Chunking documents using recursive chunking.
+3. Generating embeddings for each chunk using OpenAI.
+4. Indexing the embeddings in Pinecone for efficient retrieval.
+5. Searching for similar content based on user queries.
+
+"""
 import boto3
 import tensorflow as tf
 import openai
