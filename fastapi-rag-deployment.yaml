@@ -1,0 +1,85 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastapi-rag-deployment
+  labels:
+    app: fastapi-rag
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: fastapi-rag
+  template:
+    metadata:
+      labels:
+        app: fastapi-rag
+    spec:
+      containers:
+      - name: fastapi-rag
+        image: ghcr.io/your-username/fastapi-rag:latest
+        ports:
+        - containerPort: 8000
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        env:
+        - name: PINECONE_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: rag-secrets
+              key: pinecone-api-key
+        - name: PINECONE_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: rag-config
+              key: pinecone-env
+        - name: PINECONE_INDEX_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: rag-config
+              key: pinecone-index-name
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: rag-secrets
+              key: openai-api-key
+        - name: LANGCHAIN_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: rag-secrets
+              key: langchain-api-key
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fastapi-rag-service
+spec:
+  selector:
+    app: fastapi-rag
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: LoadBalancer
+---
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: fastapi-rag-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: fastapi-rag-deployment
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageUtilization: 70
