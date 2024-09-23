@@ -1,6 +1,4 @@
-# LLMApp-Search
-
-# Vector Database Management with Evaluation & Deployment in K8
+#  Search Engine with Vector Database Management with Evaluation & Deployment in K8
 
 ## About
 
