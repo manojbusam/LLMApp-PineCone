@@ -85,10 +85,151 @@ Result:
         * conciseness: Evaluates whether the answer is appropriately brief and to the point.
 
    These metrics provide a comprehensive evaluation of both the retrieval and generation components of the RAG system. By continuously monitoring these metrics, you can identify areas for improvement, track the system's performance over time, and ensure high-quality responses to user queries.
+
+Query:
+```
+sample_evaluation_request = EvaluationRequest(
+    questions=[
+        "What are the main advantages of vector databases?",
+        "How do vector databases improve search capabilities?",
+        "What are some applications of vector databases in AI?",
+    ],
+    contexts=[
+        [
+            "Vector databases excel at similarity search in high-dimensional spaces, making them ideal for AI and machine learning applications. They can efficiently store and query large-scale embedding data, enabling fast and accurate retrieval of similar items.",
+            "One of the main advantages of vector databases is their ability to understand the semantic meaning of data. This allows for more nuanced and context-aware querying compared to traditional keyword-based search methods."
+        ],
+        [
+            "Vector databases improve search capabilities by using mathematical representations (vectors) of data points. This allows for similarity searches based on the actual content and meaning of the data, rather than just keyword matching.",
+            "By storing data as vectors, these databases can quickly find similar items in large datasets, which is particularly useful for recommendation systems, image search, and natural language processing tasks."
+        ],
+        [
+            "Vector databases are widely used in AI applications such as recommendation systems, where they can quickly find similar items based on user preferences or item features.",
+            "In natural language processing, vector databases store word or sentence embeddings, enabling efficient semantic search and language understanding tasks.",
+            "Computer vision applications use vector databases to store and query image embeddings, facilitating tasks like image similarity search and object recognition."
+        ]
+    ],
+    answers=[
+        "The main advantages of vector databases include efficient similarity search in high-dimensional spaces, fast querying of large-scale datasets, and improved semantic understanding of data.",
+        "Vector databases improve search capabilities by enabling similarity searches based on content meaning and quickly finding similar items in large datasets, which is useful for various AI applications.",
+        "Vector databases are used in AI applications such as recommendation systems, natural language processing for semantic search, and computer vision for image similarity and object recognition tasks."
+    ],
+    ground_truths=[
+        "Vector databases offer advantages such as efficient similarity search in high-dimensional spaces, fast querying of large-scale datasets, improved semantic understanding, and suitability for AI and machine learning applications.",
+        "Vector databases enhance search capabilities through semantic understanding, efficient similarity computations, support for high-dimensional data, and the ability to quickly find similar items in large datasets, improving various AI applications.",
+        "Vector databases are applied in AI for recommendation systems, natural language processing (including semantic search and language understanding), and computer vision tasks like image similarity search and object recognition."
+    ]
+)
+```
+
+Response:
+```
+{
+  "retrieval_metrics": {
+    "context_precision": 0.92,
+    "context_recall": 0.89,
+    "context_relevancy": 0.95,
+    "retrieval_precision": 0.91
+  },
+  "generation_metrics": {
+    "faithfulness": 0.88,
+    "answer_relevancy": 0.93,
+    "answer_correctness": 0.90,
+    "answer_similarity": 0.87
+  },
+  "sample_evaluations": [
+    {
+      "question": "What are the main advantages of vector databases?",
+      "context": [
+        "Vector databases excel at similarity search in high-dimensional spaces, making them ideal for AI and machine learning applications. They can efficiently store and query large-scale embedding data, enabling fast and accurate retrieval of similar items.",
+        "One of the main advantages of vector databases is their ability to understand the semantic meaning of data. This allows for more nuanced and context-aware querying compared to traditional keyword-based search methods."
+      ],
+      "answer": "The main advantages of vector databases include efficient similarity search in high-dimensional spaces, fast querying of large-scale datasets, and improved semantic understanding of data.",
+      "ground_truth": "Vector databases offer advantages such as efficient similarity search in high-dimensional spaces, fast querying of large-scale datasets, improved semantic understanding, and suitability for AI and machine learning applications.",
+      "retrieval_metrics": {
+        "context_precision": 0.95,
+        "context_recall": 0.92,
+        "context_relevancy": 0.97,
+        "retrieval_precision": 0.94
+      },
+      "generation_metrics": {
+        "faithfulness": 0.91,
+        "answer_relevancy": 0.95,
+        "answer_correctness": 0.93,
+        "answer_similarity": 0.89
+      },
+      "aspect_critique": {
+        "overall_score": 0.92,
+        "reasoning": 0.90,
+        "relevance": 0.94,
+        "coherence": 0.93,
+        "conciseness": 0.91
+      }
+    },
+    {
+      "question": "How do vector databases improve search capabilities?",
+      "context": [
+        "Vector databases improve search capabilities by using mathematical representations (vectors) of data points. This allows for similarity searches based on the actual content and meaning of the data, rather than just keyword matching.",
+        "By storing data as vectors, these databases can quickly find similar items in large datasets, which is particularly useful for recommendation systems, image search, and natural language processing tasks."
+      ],
+      "answer": "Vector databases improve search capabilities by enabling similarity searches based on content meaning and quickly finding similar items in large datasets, which is useful for various AI applications.",
+      "ground_truth": "Vector databases enhance search capabilities through semantic understanding, efficient similarity computations, support for high-dimensional data, and the ability to quickly find similar items in large datasets, improving various AI applications.",
+      "retrieval_metrics": {
+        "context_precision": 0.93,
+        "context_recall": 0.90,
+        "context_relevancy": 0.96,
+        "retrieval_precision": 0.92
+      },
+      "generation_metrics": {
+        "faithfulness": 0.89,
+        "answer_relevancy": 0.94,
+        "answer_correctness": 0.91,
+        "answer_similarity": 0.88
+      },
+      "aspect_critique": {
+        "overall_score": 0.91,
+        "reasoning": 0.89,
+        "relevance": 0.93,
+        "coherence": 0.92,
+        "conciseness": 0.90
+      }
+    },
+    {
+      "question": "What are some applications of vector databases in AI?",
+      "context": [
+        "Vector databases are widely used in AI applications such as recommendation systems, where they can quickly find similar items based on user preferences or item features.",
+        "In natural language processing, vector databases store word or sentence embeddings, enabling efficient semantic search and language understanding tasks.",
+        "Computer vision applications use vector databases to store and query image embeddings, facilitating tasks like image similarity search and object recognition."
+      ],
+      "answer": "Vector databases are used in AI applications such as recommendation systems, natural language processing for semantic search, and computer vision for image similarity and object recognition tasks.",
+      "ground_truth": "Vector databases are applied in AI for recommendation systems, natural language processing (including semantic search and language understanding), and computer vision tasks like image similarity search and object recognition.",
+      "retrieval_metrics": {
+        "context_precision": 0.96,
+        "context_recall": 0.93,
+        "context_relevancy": 0.98,
+        "retrieval_precision": 0.95
+      },
+      "generation_metrics": {
+        "faithfulness": 0.92,
+        "answer_relevancy": 0.96,
+        "answer_correctness": 0.94,
+        "answer_similarity": 0.90
+      },
+      "aspect_critique": {
+        "overall_score": 0.93,
+        "reasoning": 0.91,
+        "relevance": 0.95,
+        "coherence": 0.94,
+        "conciseness": 0.92
+      }
+    }
+  ]
+}
+```
    
-4. **AIRFLOW Index Automation:** Automated updates and maintenance of the index
-5. **Docker Containerization & Registry** AI-driven content analysis and metadata extraction
-6. **Kubernetes Deployment:** Designed to handle large volumes of data efficiently
+5. **AIRFLOW Index Automation:** Automated updates and maintenance of the index
+6. **Docker Containerization & Registry** AI-driven content analysis and metadata extraction
+7. **Kubernetes Deployment:** Designed to handle large volumes of data efficiently
  
 
 
