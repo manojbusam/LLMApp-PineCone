@@ -8,13 +8,13 @@ This project provides an end-to-end solution for indexing and querying a vector 
 
 ## Key Features
 
-- **Vector Database Indexing:** Efficient storage and retrieval of high-dimensional data
-- **Advanced Querying:** NLP-powered search mechanism for accurate results
-- **RAGAS Evaluation:** Continuous assessment of retrieval and summarization quality
-- **Index Automation:** Automated updates and maintenance of the index
-- **Intelligent Document Processing:** AI-driven content analysis and metadata extraction
-- **Scalability:** Designed to handle large volumes of data efficiently
-- **User-Friendly Interface:** Intuitive search and result visualization tools
+1. **Vector Database Indexing:** Tools: S3, Tensorflow; Algorithms: Recursive Chunking, OpenAI ChatGPT Embedding, PineCone 
+2. **Advanced Querying:** NLP-powered search mechanism for accurate results
+3. **RAGAS Evaluation:** Continuous assessment of retrieval and summarization quality
+4. **Index Automation:** Automated updates and maintenance of the index
+5. **Intelligent Document Processing:** AI-driven content analysis and metadata extraction
+6. **Scalability:** Designed to handle large volumes of data efficiently
+7. **User-Friendly Interface:** Intuitive search and result visualization tools
 
 
  
