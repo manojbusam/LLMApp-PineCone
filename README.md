@@ -9,7 +9,7 @@ This project provides an end-to-end solution for indexing and querying a vector 
 ## Key Features
 1. **Vector Database Indexing:** Tools: S3, Tensorflow , PineCone ; Algorithms: Recursive Chunking, OpenAI ChatGPT Embedding 
 2. **Advanced Querying:** Libs: Fast API, Prompt, Parser ; Tools: Pinecone ; NLP-powered search mechanism for accurate results
-3. **RAGAS Evaluation:** Continuous assessment of retrieval and summarization quality
+3. **RAGAS Evaluation:** Continuous assessment of Retrieval and Generation quality
 4. **AIRFLOW Index Automation:** Automated updates and maintenance of the index
 5. **Docker Containerization & Registry** AI-driven content analysis and metadata extraction
 6. **Kubernetes Deployment:** Designed to handle large volumes of data efficiently
@@ -66,7 +66,28 @@ Result:
   ]
 ```
 
-3. **RAGAS Evaluation:** Continuous assessment of retrieval and summarization quality
+3. **RAGAS Evaluation:** Continuous assessment of retrieval and generation quality using:
+
+   1. Retrieval Metrics:
+      - context_precision: Measures how relevant the retrieved documents are to the query.
+      - context_recall: Assesses how well the retrieved documents cover the information needed to answer the query.
+      - context_relevancy: Evaluates the overall relevance of the retrieved context to the query.
+      - retrieval_precision: Measures the precision of the retrieval step in the RAG pipeline.
+
+   2. Generation Metrics:
+      - faithfulness: Assesses how well the generated answer aligns with the provided context.
+      - answer_relevancy: Evaluates how relevant the generated answer is to the given question.
+      - answer_correctness: Measures the factual correctness of the generated answer.
+      - answer_similarity: Compares the similarity between the generated answer and the ground truth.
+      - aspect_critique: Provides a detailed critique of various aspects of the RAG system's performance in generating answers, including:
+        * overall_score: An aggregate score of all aspects.
+        * reasoning: Evaluates the logical flow and argumentation in the answer.
+        * relevance: Assesses how well the answer addresses the specific question asked.
+        * coherence: Measures the clarity and logical consistency of the answer.
+        * conciseness: Evaluates whether the answer is appropriately brief and to the point.
+
+   These metrics provide a comprehensive evaluation of both the retrieval and generation components of the RAG system. By continuously monitoring these metrics, you can identify areas for improvement, track the system's performance over time, and ensure high-quality responses to user queries.
+   
 4. **AIRFLOW Index Automation:** Automated updates and maintenance of the index
 5. **Docker Containerization & Registry** AI-driven content analysis and metadata extraction
 6. **Kubernetes Deployment:** Designed to handle large volumes of data efficiently
