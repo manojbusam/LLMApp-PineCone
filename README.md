@@ -7,11 +7,19 @@
 This project provides an end-to-end solution for indexing and querying a vector database, enhanced with RAGAS (Retrieval Augmented Generation and Summarization) evaluation and automated index management. It's designed to streamline document processing, improve information retrieval, and maintain high-quality search results.
 
 ## Key Features
+1. **Vector Database Indexing:** Tools: S3, Tensorflow , PineCone ; Algorithms: Recursive Chunking, OpenAI ChatGPT Embedding 
+2. **Advanced Querying:** Libs: Fast API, Prompt, Parser ; Tools: Pinecone ; NLP-powered search mechanism for accurate results
+3. **RAGAS Evaluation:** Continuous assessment of retrieval and summarization quality
+4. **AIRFLOW Index Automation:** Automated updates and maintenance of the index
+5. **Docker Containerization & Registry** AI-driven content analysis and metadata extraction
+6. **Kubernetes Deployment:** Designed to handle large volumes of data efficiently
 
-1. **Vector Database Indexing:** Tools: S3, Tensorflow; Algorithms: Recursive Chunking, OpenAI ChatGPT Embedding, PineCone 
-2. **Advanced Querying:** NLP-powered search mechanism for accurate results
+## Key Feature Explaination
 
-Query:
+1. **Vector Database Indexing:** S3 stores documents, TensorFlow processes data, and Pinecone indexes vectors. Recursive chunking splits texts, while OpenAI ChatGPT generates embeddings for semantic search in Pinecone.
+2. **Advanced Querying:** FastAPI handles API requests, Prompt templates queries, Parser structures outputs; Pinecone enables vector search; NLP-powered mechanism uses embeddings for accurate semantic retrieval.
+
+Sample Query:
 ```
 curl -X POST "http://localhost:8000/query" \
      -H "Content-Type: application/json" \
@@ -59,10 +67,10 @@ Result:
 ```
 
 3. **RAGAS Evaluation:** Continuous assessment of retrieval and summarization quality
-4. **Index Automation:** Automated updates and maintenance of the index
-5. **Intelligent Document Processing:** AI-driven content analysis and metadata extraction
-6. **Scalability:** Designed to handle large volumes of data efficiently
-7. **User-Friendly Interface:** Intuitive search and result visualization tools
+4. **AIRFLOW Index Automation:** Automated updates and maintenance of the index
+5. **Docker Containerization & Registry** AI-driven content analysis and metadata extraction
+6. **Kubernetes Deployment:** Designed to handle large volumes of data efficiently
+ 
 
 
  
