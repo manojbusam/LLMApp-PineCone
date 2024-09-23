@@ -15,13 +15,12 @@ Key features:
 3. OpenAI embeddings and language model for processing
 4. Custom prompts and output parsing for structured responses
 5. Pinecone vector store for fast similarity search
-6. Comprehensive RAGAS evaluation using:
-   - Retrieval metrics: context_precision, context_recall, context_relevancy, retrieval_precision
-   - Generation metrics: faithfulness, answer_relevancy, answer_correctness, answer_similarity, aspect_critique
+6. Comprehensive RAGAS evaluation using retrieval and generation metrics
+7. LangSmith integration for dashboard visualization
 
 To use this microservice:
-1. Install dependencies: pip install fastapi uvicorn langchain pinecone-client openai pydantic ragas datasets
-2. Set up your Pinecone and OpenAI API keys as environment variables
+1. Install dependencies: pip install fastapi uvicorn langchain pinecone-client openai pydantic ragas datasets langsmith
+2. Set up your Pinecone, OpenAI, and LangSmith API keys as environment variables
 3. Run the server: uvicorn main:app --reload
 4. Access the API documentation at http://localhost:8000/docs
 """
@@ -51,6 +50,7 @@ from ragas.metrics import (
 )
 from datasets import Dataset
 from typing import List, Dict
+from langsmith import Client
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -69,6 +69,9 @@ llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo")
 
 # Initialize Pinecone vector store
 vectorstore = Pinecone.from_existing_index(index_name, embeddings)
+
+# Initialize LangSmith client
+client = Client()
 
 class QueryRequest(BaseModel):
     query: str
@@ -93,6 +96,7 @@ class EvaluationRequest(BaseModel):
 class EvaluationResponse(BaseModel):
     retrieval_metrics: Dict[str, float]
     generation_metrics: Dict[str, float]
+    sample_evaluations: List[Dict]
 
 # Create a parser based on the AnalyzedResult model
 parser = PydanticOutputParser(pydantic_object=AnalyzedResult)
@@ -189,8 +193,32 @@ async def evaluate_rag(request: EvaluationRequest):
         retrieval_dict = {metric: float(score) for metric, score in retrieval_result.items()}
         generation_dict = {metric: float(score) for metric, score in generation_result.items()}
         
+        # Prepare sample evaluations for dashboard
+        sample_evaluations = []
+        for i in range(min(5, len(request.questions))):  # Take up to 5 samples
+            sample = {
+                "question": request.questions[i],
+                "context": request.contexts[i],
+                "answer": request.answers[i],
+                "ground_truth": request.ground_truths[i],
+                "retrieval_metrics": {metric: float(retrieval_result[metric][i]) for metric in retrieval_metrics},
+                "generation_metrics": {metric: float(generation_result[metric][i]) for metric in generation_metrics if metric != aspect_critique},
+                "aspect_critique": generation_result[aspect_critique][i]
+            }
+            sample_evaluations.append(sample)
+        
+        # Log evaluation results to LangSmith
+        client.log_dataset(
+            dataset_name="RAG_Evaluation",
+            data=sample_evaluations
+        )
+        
         logger.info(f"Successfully evaluated RAG system using RAGAS metrics")
-        return EvaluationResponse(retrieval_metrics=retrieval_dict, generation_metrics=generation_dict)
+        return EvaluationResponse(
+            retrieval_metrics=retrieval_dict,
+            generation_metrics=generation_dict,
+            sample_evaluations=sample_evaluations
+        )
 
     except Exception as e:
         logger.error(f"Error evaluating RAG system: {str(e)}")
