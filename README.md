@@ -224,28 +224,47 @@ Response:
   ]
 }
 ```
+
+4. **AIRFLOW Index Automation:**  
+   This Airflow DAG automates a vector database pipeline with four main tasks: listing S3 files, indexing documents, performing queries, and evaluating results using RAGAS metrics. The tasks are executed sequentially, with dependencies set as: list_files_task >> indexing_task >> query_task >> evaluate_task
+
+5. **Docker Containerization & Registry:**  
+   - Replace the placeholder API keys and environment variables with your actual values, or consider using environment variables at runtime for better security.
+   - Build the Docker image:
+     ```
+     docker build -t fastapi-rag-app .
+     ```
+   - Run the container:
+     ```
+     docker run -p 8000:8000 fastapi-rag-app
+     ```
+   This Dockerfile sets up a Python environment, installs the necessary dependencies, copies your application code, sets environment variables, and specifies the command to run your FastAPI application using Uvicorn.
+
+6. **Kubernetes Deployment:** Designed to handle large volumes of data efficiently
    
-5. **AIRFLOW Index Automation:** Automated updates and maintenance of the index
-This Airflow DAG automates a vector database pipeline with four main tasks: listing S3 files, indexing documents, performing queries, and evaluating results using RAGAS metrics. The tasks are executed sequentially, with dependencies set as: list_files_task >> indexing_task >> query_task >> evaluate_task
+   To use this configuration:
+   - Replace `your-username` in the image field with your actual GitHub username.
+   - Create Kubernetes Secrets for sensitive data:
+     ```bash
+     kubectl create secret generic rag-secrets \
+       --from-literal=pinecone-api-key=your_pinecone_api_key \
+       --from-literal=openai-api-key=your_openai_api_key \
+       --from-literal=langchain-api-key=your_langchain_api_key
+     ```
+   - Create a ConfigMap for non-sensitive configuration:
+     ```bash
+     kubectl create configmap rag-config \
+       --from-literal=pinecone-env=your_pinecone_environment \
+       --from-literal=pinecone-index-name=your_pinecone_index_name
+     ```
+   - Apply the configuration:
+     ```bash
+     kubectl apply -f fastapi-rag-deployment.yaml
+     ```
 
-7. **Docker Containerization & Registry** AI-driven content analysis and metadata extraction
-Replace the placeholder API keys and environment variables with your actual values, or consider using environment variables at runtime for better security.
-Build the Docker image:
-```
-docker build -t fastapi-rag-app .
-```
+   This setup provides:
+   - Scalability: The HorizontalPodAutoscaler allows the deployment to scale based on demand.
+   - Efficiency: Resource requests and limits ensure efficient use of cluster resources.
+   - Security: Sensitive data is stored in Kubernetes Secrets.
+   - Flexibility: Configuration data is stored in ConfigMaps for easy updates.
 
-Run the container:
-```
-docker run -p 8000:8000 fastapi-rag-app
-```
-
-This Dockerfile sets up a Python environment, installs the necessary dependencies, copies your application code, sets environment variables, and specifies the command to run your FastAPI application using Uvicorn.
-
-9. **Kubernetes Deployment:** Designed to handle large volumes of data efficiently
- 
-
-
- 
-
- 
