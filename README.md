@@ -1,7 +1,5 @@
 #  Search Engine with Vector Database Management (Index, Query, Evaluate, Automate & Deploy in K8)
 
-## About
-
 This project provides an end-to-end solution for indexing and querying a vector database, enhanced with RAGAS (Retrieval Augmented Generation and Summarization) evaluation and automated index management. It's designed to streamline document processing, improve information retrieval, and maintain high-quality search results.
 
 ## Key Features
@@ -228,8 +226,10 @@ Response:
 ```
    
 5. **AIRFLOW Index Automation:** Automated updates and maintenance of the index
-6. **Docker Containerization & Registry** AI-driven content analysis and metadata extraction
-7. **Kubernetes Deployment:** Designed to handle large volumes of data efficiently
+This Airflow DAG automates a vector database pipeline with four main tasks: listing S3 files, indexing documents, performing queries, and evaluating results using RAGAS metrics. The tasks are executed sequentially, with dependencies set as: list_files_task >> indexing_task >> query_task >> evaluate_task
+
+7. **Docker Containerization & Registry** AI-driven content analysis and metadata extraction
+8. **Kubernetes Deployment:** Designed to handle large volumes of data efficiently
  
 
 
