@@ -7,7 +7,7 @@ Date: April 22, 2024
 This program implements vector database indexing using the following tools:
 - Amazon S3 for document storage
 - TensorFlow for processing
-- OpenAI's ChatGPT for generating embeddings
+- OpenAI's ChatGPT for generating embeddings(text-embedding-ada-002)
 - Pinecone for vector storage and retrieval
 
 The program includes functionalities for:
