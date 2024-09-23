@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+langchain
+pinecone-client
+openai
+pydantic
+ragas
+datasets
+langsmith
