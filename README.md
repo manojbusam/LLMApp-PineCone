@@ -58,11 +58,11 @@ Result:
   ]
 ```
 
-4. **RAGAS Evaluation:** Continuous assessment of retrieval and summarization quality
-5. **Index Automation:** Automated updates and maintenance of the index
-6. **Intelligent Document Processing:** AI-driven content analysis and metadata extraction
-7. **Scalability:** Designed to handle large volumes of data efficiently
-8. **User-Friendly Interface:** Intuitive search and result visualization tools
+3. **RAGAS Evaluation:** Continuous assessment of retrieval and summarization quality
+4. **Index Automation:** Automated updates and maintenance of the index
+5. **Intelligent Document Processing:** AI-driven content analysis and metadata extraction
+6. **Scalability:** Designed to handle large volumes of data efficiently
+7. **User-Friendly Interface:** Intuitive search and result visualization tools
 
 
  
