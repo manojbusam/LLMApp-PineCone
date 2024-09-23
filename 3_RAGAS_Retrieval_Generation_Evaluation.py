@@ -6,7 +6,8 @@ Date: April 22, 2024
 
 This FastAPI microservice enables sophisticated querying of a Pinecone vector database
 using LangChain components and provides comprehensive RAGAS-based evaluation capabilities.
-It uses all available RAGAS metrics for a thorough assessment of the RAG system's performance.
+It uses all available RAGAS metrics for a thorough assessment of the RAG system's performance,
+separated into retrieval and generation metrics.
 
 Key features:
 1. FastAPI for efficient API handling
@@ -14,7 +15,9 @@ Key features:
 3. OpenAI embeddings and language model for processing
 4. Custom prompts and output parsing for structured responses
 5. Pinecone vector store for fast similarity search
-6. Comprehensive RAGAS evaluation using all available metrics
+6. Comprehensive RAGAS evaluation using:
+   - Retrieval metrics: context_precision, context_recall, context_relevancy, retrieval_precision
+   - Generation metrics: faithfulness, answer_relevancy, answer_correctness, answer_similarity, aspect_critique
 
 To use this microservice:
 1. Install dependencies: pip install fastapi uvicorn langchain pinecone-client openai pydantic ragas datasets
@@ -47,7 +50,7 @@ from ragas.metrics import (
     retrieval_precision,
 )
 from datasets import Dataset
-from typing import List
+from typing import List, Dict
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -73,19 +76,23 @@ class QueryRequest(BaseModel):
 
 class AnalyzedResult(BaseModel):
     summary: str = Field(description="A brief summary of the retrieved information")
-    key_points: list[str] = Field(description="List of key points extracted from the retrieved documents")
+    key_points: List[str] = Field(description="List of key points extracted from the retrieved documents")
     relevance_score: float = Field(description="A score from 0 to 1 indicating the overall relevance of the results to the query")
 
 class QueryResponse(BaseModel):
     query: str
     analyzed_result: AnalyzedResult
-    raw_results: list
+    raw_results: List[Dict]
 
 class EvaluationRequest(BaseModel):
     questions: List[str]
     contexts: List[List[str]]
     answers: List[str]
     ground_truths: List[str]
+
+class EvaluationResponse(BaseModel):
+    retrieval_metrics: Dict[str, float]
+    generation_metrics: Dict[str, float]
 
 # Create a parser based on the AnalyzedResult model
 parser = PydanticOutputParser(pydantic_object=AnalyzedResult)
@@ -133,10 +140,10 @@ async def query_index(request: QueryRequest):
         logger.error(f"Error querying index: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/evaluate")
+@app.post("/evaluate", response_model=EvaluationResponse)
 async def evaluate_rag(request: EvaluationRequest):
     """
-    Evaluate the RAG system using all available RAGAS metrics.
+    Evaluate the RAG system using all available RAGAS metrics, separated into retrieval and generation metrics.
     """
     try:
         dataset = Dataset.from_dict({
@@ -146,30 +153,44 @@ async def evaluate_rag(request: EvaluationRequest):
             "ground_truth": request.ground_truths
         })
         
-        # Use all available RAGAS metrics
-        metrics = [
-            faithfulness,
-            answer_relevancy,
+        # Define retrieval and generation metrics
+        retrieval_metrics = [
             context_precision,
             context_recall,
             context_relevancy,
-            answer_correctness,
-            aspect_critique,
-            answer_similarity,
             retrieval_precision,
         ]
         
-        evaluation_result = evaluate(
+        generation_metrics = [
+            faithfulness,
+            answer_relevancy,
+            answer_correctness,
+            answer_similarity,
+            aspect_critique,
+        ]
+        
+        # Evaluate retrieval metrics
+        retrieval_result = evaluate(
             dataset=dataset,
-            metrics=metrics,
+            metrics=retrieval_metrics,
             llm=llm,
             embeddings=embeddings
         )
         
-        result_dict = {metric: float(score) for metric, score in evaluation_result.items()}
+        # Evaluate generation metrics
+        generation_result = evaluate(
+            dataset=dataset,
+            metrics=generation_metrics,
+            llm=llm,
+            embeddings=embeddings
+        )
         
-        logger.info(f"Successfully evaluated RAG system using all RAGAS metrics: {result_dict}")
-        return result_dict
+        # Format results
+        retrieval_dict = {metric: float(score) for metric, score in retrieval_result.items()}
+        generation_dict = {metric: float(score) for metric, score in generation_result.items()}
+        
+        logger.info(f"Successfully evaluated RAG system using RAGAS metrics")
+        return EvaluationResponse(retrieval_metrics=retrieval_dict, generation_metrics=generation_dict)
 
     except Exception as e:
         logger.error(f"Error evaluating RAG system: {str(e)}")
