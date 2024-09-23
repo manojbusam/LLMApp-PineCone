@@ -1,6 +1,6 @@
 # LLMApp-Search
 
-# Vector Database Indexing and Querying with RAGAS Evaluation & Index Automation
+# Vector Database Management with Evaluation & Deployment in K8
 
 ## About
 
