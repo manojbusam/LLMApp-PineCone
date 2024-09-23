@@ -229,7 +229,20 @@ Response:
 This Airflow DAG automates a vector database pipeline with four main tasks: listing S3 files, indexing documents, performing queries, and evaluating results using RAGAS metrics. The tasks are executed sequentially, with dependencies set as: list_files_task >> indexing_task >> query_task >> evaluate_task
 
 7. **Docker Containerization & Registry** AI-driven content analysis and metadata extraction
-8. **Kubernetes Deployment:** Designed to handle large volumes of data efficiently
+Replace the placeholder API keys and environment variables with your actual values, or consider using environment variables at runtime for better security.
+Build the Docker image:
+```
+docker build -t fastapi-rag-app .
+```
+
+Run the container:
+```
+docker run -p 8000:8000 fastapi-rag-app
+```
+
+This Dockerfile sets up a Python environment, installs the necessary dependencies, copies your application code, sets environment variables, and specifies the command to run your FastAPI application using Uvicorn.
+
+9. **Kubernetes Deployment:** Designed to handle large volumes of data efficiently
  
 
 
